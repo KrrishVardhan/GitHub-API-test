@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub API test</title>
+    <style>
+        *{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: #3b3f4a;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 60px 16px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #dde1e8;
+            border-radius: 10px;
+            padding: 32px;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        h1 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #8a90a0;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        #username {
+            flex: 1;
+            background-color: #f7f8fa;
+            border: 1px solid #dde1e8;
+            border-radius: 6px;
+            color: #3b3f4a;
+            font-size: 0.9rem;
+            padding: 9px 14px;
+            outline: none;
+        }
+
+        #username::placeholder {
+            color: #adb2be;
+        }
+
+        #username:focus {
+            border-color: #a0a8bb;
+        }
+
+        #submit {
+            background-color: #e8eaf0;
+            border: 1px solid #d0d4de;
+            border-radius: 6px;
+            color: #3b3f4a;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 9px 18px;
+        }
+
+        .profile {
+            margin-top: 28px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        #avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            border: 2px solid #dde1e8;
+            display: none;
+        }
+
+        #name {
+            font-size: 1rem;
+            color: #3b3f4a;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>GitHub Profile</h1>
+        <div class="search-row">
+            <input id="username" type="text" placeholder="github username">
+            <button id="submit">Search</button>
+        </div>
+        <div class="profile">
+            <img id="avatar" src="" alt="avatar">
+            <p id="name"></p>
+            <p id="public_repos"></p>
+        </div>
+    </div>
+    <script>
+        const usernameRef = document.getElementById("username");
+        const buttonRef = document.getElementById("submit");
+        const nameRef = document.getElementById("name");
+        const avatarRef = document.getElementById("avatar");
+        const public_reposRef = document.getElementById("public_repos");
+
+        buttonRef.addEventListener("click", function () {
+            // nameRef.innerText = usernameRef.value
+            fetch(`https://api.github.com/users/${usernameRef.value}`)
+                .then((res) => res.json())
+                .then((data) => {
+                    avatarRef.setAttribute("src", data.avatar_url);
+                    avatarRef.style.display = "block";
+                    nameRef.innerText = data.name;
+                    usernameRef.value = ""
+                    public_reposRef.innerText = `Repos: ${data.public_repos}`;
+                });
+        })
+    </script>
+</body>
+
+</html>
